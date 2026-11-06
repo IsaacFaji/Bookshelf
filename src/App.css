@@ -1,0 +1,300 @@
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navigation bar */
+
+.navbar {
+  min-height: 76px;
+  padding: 0 6%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f5ed;
+  color: #17375e;
+  border-bottom: 1px solid #dedbd2;
+}
+
+.logo {
+  font-family: Georgia, serif;
+  font-size: 29px;
+  font-weight: bold;
+  color: #17375e;
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.navbar nav a {
+  font-size: 14px;
+  color: #17375e;
+}
+
+.navbar nav a:hover {
+  color: #98794c;
+}
+
+.register-link {
+  padding: 11px 19px;
+  border: none;
+  border-radius: 4px;
+  background-color: #17375e;
+  color: white !important;
+}
+
+.register-link:hover {
+  background-color: #254c79;
+}
+
+/* Homepage introduction */
+
+.hero {
+  padding: 85px 20px 75px;
+  text-align: center;
+  background-color: #f1ebdd;
+}
+
+.eyebrow {
+  color: #8b7654;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  margin: 16px 0;
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 5vw, 48px);
+}
+
+.hero-description {
+  max-width: 560px;
+  margin: 0 auto 28px;
+  color: #657083;
+  line-height: 1.7;
+}
+
+/* Search bar */
+
+.search-form {
+  display: flex;
+  max-width: 570px;
+  margin: 0 auto;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd5c6;
+  border-radius: 6px;
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px;
+  border: none;
+  outline: none;
+}
+
+.search-form button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  background-color: #17375e;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Featured books */
+
+.featured-section {
+  width: 88%;
+  max-width: 1250px;
+  margin: 65px auto;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  margin: 8px 0 0;
+  font-family: Georgia, serif;
+  font-size: 32px;
+}
+
+.section-description {
+  color: #657083;
+  font-size: 14px;
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 25px;
+}
+
+.book-card {
+  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid #e6e0d5;
+  border-radius: 6px;
+}
+
+/* Temporary book cover designs */
+
+.book-cover {
+  height: 220px;
+  margin: 15px;
+  padding: 22px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  box-shadow: 2px 3px 6px #0002;
+  font-family: Georgia, serif;
+}
+
+.cover-title {
+  margin-top: 35px;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.cover-author {
+  font-size: 12px;
+}
+
+.cover-one {
+  background: #795c47;
+}
+
+.cover-two {
+  background: #293e59;
+}
+
+.cover-three {
+  background: #526b56;
+}
+
+.cover-four {
+  background: #9b7044;
+}
+
+.cover-five {
+  background: #41465b;
+}
+
+.cover-six {
+  background: #76545c;
+}
+
+.cover-seven {
+  background: #697b73;
+}
+
+.cover-eight {
+  background: #343c49;
+}
+
+/* Book information */
+
+.book-info {
+  padding: 0 16px 17px;
+}
+
+.book-info h3 {
+  margin: 0 0 7px;
+  font-family: Georgia, serif;
+  font-size: 17px;
+}
+
+.book-info p {
+  margin: 0 0 7px;
+  color: #687386;
+  font-size: 13px;
+}
+
+.book-year {
+  color: #8b7654;
+  font-size: 12px;
+}
+
+.details-button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #17375e;
+  border-radius: 4px;
+  background-color: #17375e;
+  color: #fff;
+  cursor: pointer;
+}
+
+.details-button:hover {
+  background-color: #254c79;
+}
+
+/* Footer */
+
+.footer {
+  margin-top: auto;
+  padding: 25px;
+  background-color: #f1ebdd;
+  color: #657083;
+  text-align: center;
+  font-size: 13px;
+  border-top: 1px solid #dedbd2;
+}
+
+/* Mobile layout */
+
+@media (max-width: 850px) {
+  .book-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .section-heading {
+    display: block;
+  }
+}
+
+@media (max-width: 550px) {
+  .navbar {
+    padding: 18px 5%;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .navbar nav {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .hero {
+    padding: 55px 15px;
+  }
+
+  .search-form {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .search-form button {
+    width: 100%;
+  }
+
+  .book-grid {
+    grid-template-columns: 1fr;
+  }
+}
