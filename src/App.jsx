@@ -1,6 +1,7 @@
 
 import './App.css'
 import Login from './Login'
+import Register from './Register'
 
 function Home() {
   const books = [
@@ -101,7 +102,12 @@ function App() {
     return <Login />
   }
 
+  if (currentPath === '/register') {
+    return <Register />
+  }
+
   return <Home />
 }
 
 export default App
+

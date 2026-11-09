@@ -148,7 +148,7 @@
   border-radius: 6px;
 }
 
-/* Temporary book cover designs */
+/*Book cover designs */
 
 .book-cover {
   height: 220px;
@@ -396,4 +396,26 @@
   .auth-card {
     padding: 28px 22px;
   }
+}
+
+
+/* Registration page */
+
+.verification-notice {
+  margin: 5px 0 20px;
+  padding: 13px;
+  background-color: #f1ebdd;
+  border-left: 3px solid #17375e;
+  border-radius: 3px;
+}
+
+.verification-notice p {
+  margin: 0;
+  color: #657083;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.verification-notice strong {
+  color: #17375e;
 }
