@@ -1,7 +1,8 @@
 
 import './App.css'
+import Login from './Login'
 
-function App() {
+function Home() {
   const books = [
     { title: 'The Hunger Games', author: 'Suzanne Collins', year: '2008', color: 'cover-one' },
     { title: '1984', author: 'George Orwell', year: '1949', color: 'cover-two' },
@@ -91,6 +92,16 @@ function App() {
       </footer>
     </div>
   )
+}
+
+function App() {
+  const currentPath = window.location.pathname
+
+  if (currentPath === '/login') {
+    return <Login />
+  }
+
+  return <Home />
 }
 
 export default App
