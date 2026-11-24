@@ -1,15 +1,16 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const authenticateToken = require("../middleware/auth");
 
 const router = express.Router();
 
-// POST /api/auth/register
+// Registration endpoint
 router.post("/register", async (req, res) => {
   try {
     const { email, password } = req.body || {};
 
-    // Validate email
     if (
       typeof email !== "string" ||
       email.length > 254 ||
@@ -20,7 +21,6 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Validate password
     if (
       typeof password !== "string" ||
       password.length < 8 ||
@@ -33,7 +33,6 @@ router.post("/register", async (req, res) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Check whether email already exists
     const existingUser = await User.findOne({
       email: normalizedEmail
     });
@@ -44,10 +43,8 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    // Hash password before saving
     const passwordHash = await bcrypt.hash(password, 12);
 
-    // Create MongoDB user
     const user = await User.create({
       email: normalizedEmail,
       passwordHash
@@ -77,12 +74,11 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// POST /api/auth/login
+// Login endpoint
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body || {};
 
-    // Validate input
     if (
       typeof email !== "string" ||
       typeof password !== "string" ||
@@ -98,7 +94,6 @@ router.post("/login", async (req, res) => {
 
     const normalizedEmail = email.trim().toLowerCase();
 
-    // Find the registered user
     const user = await User.findOne({
       email: normalizedEmail
     }).select("+passwordHash");
@@ -109,7 +104,6 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Compare password with stored hash
     const passwordMatches = await bcrypt.compare(
       password,
       user.passwordHash
@@ -121,9 +115,19 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // Successful login credential verification
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user._id.toString() },
+      process.env.JWT_SECRET,
+      {
+        algorithm: "HS256",
+        expiresIn: process.env.JWT_EXPIRES_IN
+      }
+    );
+
     return res.status(200).json({
       message: "Login successful.",
+      token,
       user: {
         id: user._id,
         email: user.email,
@@ -139,4 +143,33 @@ router.post("/login", async (req, res) => {
     });
   }
 });
+
+// Protected user information endpoint
+router.get("/me", authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found."
+      });
+    }
+
+    return res.status(200).json({
+      user: {
+        id: user._id,
+        email: user.email,
+        isVerified: user.isVerified
+      }
+    });
+
+  } catch (error) {
+    console.error("User lookup failed:", error.message);
+
+    return res.status(500).json({
+      message: "An unexpected server error occurred."
+    });
+  }
+});
+
 module.exports = router;
