@@ -33,9 +33,15 @@ async function startServer() {
 
     console.log("Connected to BookShelf MongoDB");
 
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`BookShelf backend running on port ${PORT}`);
-    });
+    app.listen(PORT, "0.0.0.0", (error) => {
+  if (error) {
+    console.error("Server startup failed:", error.message);
+    process.exit(1);
+  }
+
+  console.log(`BookShelf backend running on port ${PORT}`);
+});
+
   } catch (error) {
     console.error("Database connection failed:", error.message);
     process.exit(1);
