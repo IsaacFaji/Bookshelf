@@ -1,14 +1,36 @@
 async function apiRequest(endpoint, options = {}) {
-  const response = await fetch(`/api${endpoint}`, {
-    ...options,
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers
-    }
-  });
+  let response;
 
-  const data = await response.json();
+  try {
+    response = await fetch(`/api${endpoint}`, {
+      ...options,
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        ...options.headers
+      }
+    });
+  } catch {
+    throw new Error(
+      "Unable to connect to BookShelf. Please try again later."
+    );
+  }
+
+  if ([502, 503, 504].includes(response.status)) {
+    throw new Error(
+      "BookShelf is temporarily unavailable. Please try again later."
+    );
+  }
+
+  let data;
+
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error(
+      "The server returned an unexpected response. Please try again later."
+    );
+  }
 
   if (!response.ok) {
     const error = new Error(
