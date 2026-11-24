@@ -1,5 +1,30 @@
+import { useState } from 'react'
+import { useAuth } from './AuthContext'
 
 function Login() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const { login, loading } = useAuth()
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    setError('')
+    setSubmitting(true)
+
+    try {
+      await login(email, password)
+
+      window.location.href = '/'
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   return (
     <div className="app">
       <header className="navbar">
@@ -9,7 +34,9 @@ function Login() {
           <a href="/">Home</a>
           <a href="/reading-list">My Reading List</a>
           <a href="/login">Login</a>
-          <a className="register-link" href="/register">Register</a>
+          <a className="register-link" href="/register">
+            Register
+          </a>
         </nav>
       </header>
 
@@ -23,13 +50,17 @@ function Login() {
             more books.
           </p>
 
-          <form onSubmit={(event) => event.preventDefault()}>
+          <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="email">Email Address</label>
               <input
                 type="email"
                 id="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                autoComplete="email"
+                maxLength={254}
                 required
               />
             </div>
@@ -40,23 +71,39 @@ function Login() {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                autoComplete="current-password"
                 required
               />
             </div>
 
-            <button className="auth-button" type="submit">
-              Login
+            {error && (
+              <p className="auth-error" role="alert">
+                {error}
+              </p>
+            )}
+
+            <button
+              className="auth-button"
+              type="submit"
+              disabled={submitting || loading}
+            >
+              {submitting ? 'Logging In...' : 'Login'}
             </button>
           </form>
 
           <p className="auth-footer">
-            Don't have an account? <a href="/register">Register here</a>
+            Don't have an account?{' '}
+            <a href="/register">Register here</a>
           </p>
         </section>
       </main>
 
       <footer className="footer">
-        <p>BookShelf &copy; 2026. Discover your next favorite story.</p>
+        <p>
+          BookShelf &copy; 2026. Discover your next favorite story.
+        </p>
       </footer>
     </div>
   )

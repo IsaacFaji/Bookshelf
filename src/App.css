@@ -419,3 +419,29 @@
 .verification-notice strong {
   color: #17375e;
 }
+
+.auth-error {
+  background-color: #fce8e6;
+  color: #9b2525;
+  border: 1px solid #e4b4b4;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 0.9rem;
+}
+
+.auth-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.nav-user {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.logout-button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}

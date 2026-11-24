@@ -2,8 +2,20 @@
 import './App.css'
 import Login from './Login'
 import Register from './Register'
+import { useAuth } from './AuthContext'
 
 function Home() {
+  const { user, loading, logout, authError } = useAuth()
+
+  async function handleLogout() {
+    try {
+      await logout()
+      window.location.href = '/login'
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+
   const books = [
     { title: 'The Hunger Games', author: 'Suzanne Collins', year: '2008', color: 'cover-one' },
     { title: '1984', author: 'George Orwell', year: '1949', color: 'cover-two' },
@@ -20,13 +32,40 @@ function Home() {
       <header className="navbar">
         <a className="logo" href="/">BookShelf</a>
 
-        <nav>
-          <a href="/">Home</a>
-          <a href="/reading-list">My Reading List</a>
-          <a href="/login">Login</a>
-          <a className="register-link" href="/register">Register</a>
-        </nav>
+      <nav>
+  <a href="/">Home</a>
+  <a href="/reading-list">My Reading List</a>
+
+  {loading ? (
+    <span>Loading...</span>
+  ) : user ? (
+    <>
+      <span className="nav-user">{user.email}</span>
+
+      <button
+        className="register-link logout-button"
+        onClick={handleLogout}
+        type="button"
+      >
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <a href="/login">Login</a>
+      <a className="register-link" href="/register">
+        Register
+      </a>
+    </>
+  )}
+</nav>
       </header>
+
+{authError && (
+  <p className="auth-error" role="alert">
+    {authError}
+  </p>
+)}
 
       <main>
         <section className="hero">
