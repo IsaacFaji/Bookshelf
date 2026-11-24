@@ -125,15 +125,24 @@ router.post("/login", async (req, res) => {
       }
     );
 
-    return res.status(200).json({
-      message: "Login successful.",
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        isVerified: user.isVerified
-      }
-    });
+// Store JWT in an HttpOnly cookie
+res.cookie("bookshelf_token", token, {
+  httpOnly: true,
+  secure: false,
+  sameSite: "strict",
+  maxAge: 60 * 60 * 1000,
+  path: "/"
+});
+
+// Return user information
+return res.status(200).json({
+  message: "Login successful.",
+  user: {
+    id: user._id,
+    email: user.email,
+    isVerified: user.isVerified
+  }
+});
 
   } catch (error) {
     console.error("Login error:", error.message);
@@ -172,4 +181,17 @@ router.get("/me", authenticateToken, async (req, res) => {
   }
 });
 
+// Logout endpoint
+router.post("/logout", (req, res) => {
+  res.clearCookie("bookshelf_token", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    path: "/"
+  });
+
+  return res.status(200).json({
+    message: "Logout successful."
+  });
+});
 module.exports = router;

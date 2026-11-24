@@ -1,15 +1,23 @@
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers.authorization;
+  const cookieHeader = req.headers.cookie || "";
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  // Find the BookShelf authentication cookie
+  const tokenCookie = cookieHeader
+    .split(";")
+    .map(cookie => cookie.trim())
+    .find(cookie => cookie.startsWith("bookshelf_token="));
+
+  if (!tokenCookie) {
     return res.status(401).json({
       message: "Authentication required."
     });
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = tokenCookie.substring(
+    "bookshelf_token=".length
+  );
 
   try {
     const decoded = jwt.verify(
