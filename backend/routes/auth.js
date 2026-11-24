@@ -77,4 +77,66 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// POST /api/auth/login
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body || {};
+
+    // Validate input
+    if (
+      typeof email !== "string" ||
+      typeof password !== "string" ||
+      !email.trim() ||
+      !password ||
+      email.length > 254 ||
+      Buffer.byteLength(password, "utf8") > 72
+    ) {
+      return res.status(400).json({
+        message: "Invalid email or password format."
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Find the registered user
+    const user = await User.findOne({
+      email: normalizedEmail
+    }).select("+passwordHash");
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Invalid email or password."
+      });
+    }
+
+    // Compare password with stored hash
+    const passwordMatches = await bcrypt.compare(
+      password,
+      user.passwordHash
+    );
+
+    if (!passwordMatches) {
+      return res.status(401).json({
+        message: "Invalid email or password."
+      });
+    }
+
+    // Successful login credential verification
+    return res.status(200).json({
+      message: "Login successful.",
+      user: {
+        id: user._id,
+        email: user.email,
+        isVerified: user.isVerified
+      }
+    });
+
+  } catch (error) {
+    console.error("Login error:", error.message);
+
+    return res.status(500).json({
+      message: "An unexpected server error occurred."
+    });
+  }
+});
 module.exports = router;
